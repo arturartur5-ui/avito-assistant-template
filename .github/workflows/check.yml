@@ -19,7 +19,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262   # v4, закреплено по SHA 21.09.2026
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1   # v4, закреплено по SHA 21.09.2026
         with:
           fetch-depth: 0                 # проверка истории: секрет, добавленный и удалённый в одном PR
           persist-credentials: false     # токен GitHub не оставляем в клоне, код из PR его не увидит
