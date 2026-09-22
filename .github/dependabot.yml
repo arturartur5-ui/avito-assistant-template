@@ -1,0 +1,7 @@
+# Обновления закреплённых по SHA действий приходят pull request-ом, а не молча.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

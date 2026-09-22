@@ -1,0 +1,45 @@
+# ДАННЫЕ КЛИЕНТА — в репозиторий не попадают никогда.
+# Исключения только для пустых заглушек и шаблонов без данных.
+corpus/*
+!corpus/.gitkeep
+knowledge/*
+!knowledge/.gitkeep
+!knowledge/usloviya.template.md
+
+# Ключи и доступы
+.env
+.env.*
+!.env.example
+.token_cache*.json
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Таблицы соответствий pii-guard — это ключ к переопознанию людей
+pii-guard-data/
+mapping.json
+
+# Служебное
+__pycache__/
+*.pyc
+.DS_Store
+.checkpoint
+
+# Личные термины для pre-commit проверки
+.personal-terms
+
+# база оценок экзамена и журналы: сырые тексты, в git не место
+data/
+logs/
+*.db
+*.sqlite
+*.sqlite3
+*.log
+# настройки Claude Code: в репозитории только список запретов
+.claude/*
+!.claude/settings.json
+# готовый промпт — это уже know-how специалиста
+prompt/SOUL.md
+# заполненное техзадание: формулировки специалиста и его внутренние правила
+TZ.md

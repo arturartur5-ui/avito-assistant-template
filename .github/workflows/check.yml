@@ -1,0 +1,43 @@
+# Проверки при каждом пуше и в каждом pull request.
+#
+# Список личных терминов (.personal-terms) в репозиторий не попадает, поэтому
+# здесь работают только проверки по форме: телефоны, почты, номера документов,
+# ключи. Проверка по именам — в хуках на вашей машине (scripts/install-hooks.sh).
+#
+# Права рабочего процесса — только чтение содержимого, никаких секретов.
+# Код из pull request здесь выполняется (тесты, config/niche.py) — на раннере
+# GitHub, без секретов и с токеном только на чтение. Первые PR от посторонних
+# GitHub и так держит до ручного одобрения.
+name: проверки
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262   # v4, закреплено по SHA 21.09.2026
+        with:
+          fetch-depth: 0                 # проверка истории: секрет, добавленный и удалённый в одном PR
+          persist-credentials: false     # токен GitHub не оставляем в клоне, код из PR его не увидит
+
+      - name: Код компилируется
+        run: python3 -m py_compile src/*.py scripts/*.py config/*.py config/examples/*.py
+
+      - name: Личные данные по форме
+        run: python3 scripts/check-personal-data.py --all
+
+      - name: Секреты и личные данные — все файлы и вся история
+        run: python3 scripts/check-before-publish.py --ci
+
+      - name: Настройка ниши
+        run: python3 scripts/check-niche.py
+
+      - name: Образцы настроек проходят ту же проверку
+        run: for f in config/examples/*.py; do python3 scripts/check-niche.py --file "$f" || exit 1; done
+
+      - name: Клиент API
+        run: PYTHONPATH=src python3 -m unittest discover -s tests -v
